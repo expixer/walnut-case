@@ -1,4 +1,6 @@
 import { launch } from 'puppeteer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 async function getNewsTitle() {
     try {
@@ -7,8 +9,6 @@ async function getNewsTitle() {
         });
 
         const page = await browser.newPage();
-
-        page.on('load', () => console.log('Sayfa yüklendi'));
 
         await page.goto('https://trthaber.com', {
             waitUntil: 'domcontentloaded'
@@ -41,7 +41,36 @@ async function getNewsTitle() {
     }
 }
 
-// Fonksiyonu çalıştır
-getNewsTitle()
-    .then(title => console.log('İşlem başarılı:', title))
-    .catch(error => console.error('İşlem başarısız:', error));
+function wordCount(text) {
+    if (typeof text !== 'string') return 0;
+    const words = text.trim().split(/\s+/);
+    return words.length;
+}
+
+const title = await getNewsTitle()
+
+senDataToApi(title)
+
+async function senDataToApi(title) {
+    try {
+        const response = await fetch(process.env.API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ title, wordCount: wordCount(title) }),
+        });
+
+        if (!response.ok) {
+            throw new Error('API isteği başarısız');
+        }
+
+        const data = await response.json();
+
+        console.log('API isteği başarılı:', data);
+    } catch (error) {
+        console.error('API isteği başarısız:', error);
+        throw error;
+    }
+}
