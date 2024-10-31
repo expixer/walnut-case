@@ -41,16 +41,6 @@ async function getNewsTitle() {
     }
 }
 
-function wordCount(text) {
-    if (typeof text !== 'string') return 0;
-    const words = text.trim().split(/\s+/);
-    return words.length;
-}
-
-const title = await getNewsTitle()
-
-senDataToApi(title)
-
 async function senDataToApi(title) {
     try {
         const response = await fetch(process.env.API_URL, {
@@ -74,3 +64,13 @@ async function senDataToApi(title) {
         throw error;
     }
 }
+
+function wordCount(text) {
+    if (typeof text !== 'string') return 0;
+    const words = text.trim().split(/\s+/);
+    return words.length;
+}
+
+const title = await getNewsTitle()
+console.log('Başlık:', title);
+senDataToApi(title)
