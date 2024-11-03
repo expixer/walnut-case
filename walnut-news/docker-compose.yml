@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  scraper:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME:-scraperproject}_scraper
+    volumes:
+      - ./:/app
+
+  cron:
+    image: mcuadros/ofelia:latest
+    container_name: ${COMPOSE_PROJECT_NAME:-scraperproject}_cron
+    depends_on:
+      - scraper
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-run.scraper-job.schedule: "@every 5m"
+      ofelia.job-run.scraper-job.container: "${COMPOSE_PROJECT_NAME:-scraperproject}_scraper"
+      ofelia.job-run.scraper-job.command: "node /app/scraper.js"
