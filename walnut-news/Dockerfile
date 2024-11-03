@@ -1,19 +1,21 @@
-FROM node:22
+FROM node:22-slim
 
+RUN apt-get update \
+    && apt-get install -y wget gnupg \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable libxss1 \
+      --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+ 
 WORKDIR /app
-COPY package*.json ./
+ 
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+ 
 RUN npm install
+ 
 COPY . .
-
-RUN apt-get update && apt-get install -y \
-    libnss3 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxrandr2 \
-    libgbm1 \
-    xdg-utils
-
-CMD ["node", "scraper.js"]
+ 
+CMD [ "node", "scraper.js" ]

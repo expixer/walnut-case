@@ -6,6 +6,7 @@ async function getNewsTitle() {
     try {
         const browser = await launch({
             headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
 
         const page = await browser.newPage();
