@@ -44,13 +44,17 @@ async function getNewsTitle() {
 
 async function senDataToApi(title) {
     try {
+        const body = [
+                { title, word_count: wordCount(title) }
+        ];
+
         const response = await fetch(process.env.API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({ title, wordCount: wordCount(title) }),
+            body: JSON.stringify(body),
         });
 
         if (!response.ok) {
@@ -74,4 +78,4 @@ function wordCount(text) {
 
 const title = await getNewsTitle()
 console.log('Başlık:', title);
-senDataToApi(title)
+await senDataToApi(title)

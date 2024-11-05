@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncomingLogDataController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\IncomingLogController;
@@ -24,6 +25,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin-users', AdminUserController::class);
 
     Route::resource('incoming-logs', IncomingLogController::class)->only([
+        'index', 'show'
+    ]);
+    Route::resource('incoming-log-data', IncomingLogDataController::class)->only([
         'index', 'show'
     ]);
 

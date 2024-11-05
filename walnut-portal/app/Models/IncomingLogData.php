@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class IncomingLogData extends Model {
     use SoftDeletes;
 
+    protected $table = 'incoming_log_datas';
     protected $fillable = ['payload', 'inserted'];
     protected $casts = [
         'payload' => 'array',

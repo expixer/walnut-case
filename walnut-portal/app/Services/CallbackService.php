@@ -30,7 +30,7 @@ class CallbackService
 
                 CallbackLog::create([
                     'incoming_log_id' => $incomingLog->id,
-                    'status' => $response->ok ? 'confirmed' : 'pending',
+                    'status' => $response['ok'] ? 'confirmed' : 'pending',
                     'result' => json_encode($response)
                 ]);
 
@@ -54,7 +54,7 @@ class CallbackService
 
     protected function sendToTestReceiver(array $entry)
     {
-        $response = Http::post('/test-receiver', $entry);
+        $response = Http::post(config('app.url') . '/api/test-receiver', $entry);
         return $response->json();
     }
 }

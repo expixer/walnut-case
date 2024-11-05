@@ -19,6 +19,9 @@
                         <a class="nav-link" href="{{ route('incoming-logs.index') }}">Incoming Logs</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('incoming-log-data.index') }}">Incoming Log Data</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('callback-logs.index') }}">Callback Log</a>
                     </li>
                 </ul>
